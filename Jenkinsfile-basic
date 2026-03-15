@@ -2,37 +2,57 @@
 
 pipeline {
     agent any
+
     tools {
-        maven 'Maven'
+        maven 'maven-3.9'
     }
+
     stages {
-        stage('build jar') {
+
+        stage('Build Jar') {
             steps {
                 script {
                     echo "Building the application..."
-                    sh 'mvn package'
+                    sh 'mvn clean package'
                 }
             }
         }
-        stage('biuld image') {
+
+        stage('Build Image') {
             steps {
                 script {
-                    echo "building the docker image..."
-                    withCredentials([usernamePassword(credentialsId: 'docker-hub-repo', passwordVariable: 'PASS', usernameVariable: 'USER')]) {
-                        sh 'docker build -t nimmalabala00/demo-app:mva-2.0 .'
-                        sh "echo $PASS | docker login -u $USER --password-stdin"
-                        sh 'docker push nimmalabala00/demo-app:mva-2.0'
+                    echo "Building the Docker image..."
 
-                    }
-                }
-                stage('deploy') {
-                    steps {
-                        script {
-                            echo "Deploying the application..."
-                        }
+                    withCredentials([usernamePassword(
+                        credentialsId: 'docker-hub-repo',
+                        usernameVariable: 'USER',
+                        passwordVariable: 'PASS'
+                    )]) {
+
+                        sh 'docker build -t nimmalabala00/demo-app:mva-2.0 .'
+                        sh 'echo $PASS | docker login -u $USER --password-stdin'
+                        sh 'docker push nimmalabala00/demo-app:mva-2.0'
                     }
                 }
             }
+        }
+
+        stage('Deploy') {
+            steps {
+                script {
+                    echo "Deploying the application..."
+                }
+            }
+        }
+
+    }
+
+    post {
+        success {
+            echo "Pipeline executed successfully!"
+        }
+        failure {
+            echo "Pipeline failed!"
         }
     }
 }
