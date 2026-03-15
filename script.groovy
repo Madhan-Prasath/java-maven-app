@@ -1,11 +1,17 @@
 def buildApp() {
     echo "Building the application..."
-    sh 'mvn clean package'
+
+    withMaven(maven: 'maven-3.9') {
+        sh 'mvn clean package'
+    }
 }
 
 def testApp() {
     echo "Running tests..."
-    sh 'mvn test'
+
+    withMaven(maven: 'maven-3.9') {
+        sh 'mvn test'
+    }
 }
 
 def buildImage() {
