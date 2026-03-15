@@ -3,12 +3,15 @@
 def gv
 
 pipeline {
+
     agent any
-tools {
-    maven 'maven-3.9'
-}
+
+    tools {
+        maven 'maven-3.9'
+    }
+
     parameters {
-        choice(name: 'VERSION', choices: ['1.1.0', '1.2.0', '1.3.0'], description: 'Application version')
+        choice(name: 'VERSION', choices: ['1.1.0','1.2.0','1.3.0'], description: 'Application version')
         booleanParam(name: 'executeTests', defaultValue: true, description: 'Run tests?')
     }
 
@@ -32,9 +35,7 @@ tools {
 
         stage("test") {
             when {
-                expression {
-                    params.executeTests
-                }
+                expression { params.executeTests }
             }
             steps {
                 script {
@@ -55,19 +56,18 @@ tools {
             steps {
                 script {
 
-                    env.ENV = input message: "Select environment",
-                    ok: "Deploy",
-                    parameters: [
-                        choice(
-                            name: 'ENVIRONMENT',
-                            choices: ['dev', 'staging', 'prod'],
-                            description: 'Deployment Environment'
-                        )
-                    ]
+                    def selectedEnv = input(
+                        message: "Select environment",
+                        parameters: [
+                            choice(name: 'ENV', choices: ['dev','staging','prod'], description: '')
+                        ]
+                    )
+
+                    env.ENV = selectedEnv
 
                     gv.deployApp()
 
-                    echo "Deploying version ${params.VERSION} to ${ENV}"
+                    echo "Deploying version ${params.VERSION} to ${env.ENV}"
                 }
             }
         }
