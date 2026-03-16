@@ -40,6 +40,7 @@ pipeline {
             steps {
                 script {
                     gv.testApp()
+                     echo "Testing the integration"
                 }
             }
         }
