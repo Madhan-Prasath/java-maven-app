@@ -1,28 +1,30 @@
-#!/usr/bin/env groovy
-
 pipeline {
-    agent none
+    
+    agent any
+
     stages {
+        
         stage('build') {
+    
             steps {
-                script {
-                    echo "Building the application..."
-                }
+               echo "Building the application..."
             }
         }
+
         stage('test') {
-            steps {
-                script {
-                    echo "Testing the application..."
-                }
+       
+         steps {
+              echo "Testing the application..."
             }
         }
+
         stage('deploy') {
-            steps {
-                script {
-                    echo "Deploying the application..."
-                }
-            }
+       
+        steps {
+            echo "Deploying the application..."
+             }
         }
     }
 }
+
+
