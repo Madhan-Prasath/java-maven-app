@@ -1,4 +1,4 @@
-FROM openjdk:19-ea-jdk-alpine3.16
+FROM openjdk:28-ea-trixie
 
 EXPOSE 8080
 
