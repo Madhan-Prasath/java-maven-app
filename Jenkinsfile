@@ -31,15 +31,15 @@ pipeline {
                 }
             }
         }
-        // stage("build and push image") {
-        //     steps {
-        //         script {
-        //             buildImage 'nanajanashia/demo-app:jma-3.0'
-        //             dockerLogin()
-        //             dockerPush 'nanajanashia/demo-app:jma-3.0'
-        //         }
-        //     }
-        // }
+        stage("build and push image") {
+            steps {
+                script {
+                    buildImage 'madhan76/demo-app:jma-3.0'
+                    dockerLogin()
+                    dockerPush 'madhan76/demo-app:jma-3.0'
+                }
+            }
+        }
         // stage("deploy") {
         //     steps {
         //         script {
